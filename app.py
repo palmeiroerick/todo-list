@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
@@ -15,4 +15,12 @@ def hello_world():
 
 @app.route("/api/todos")
 def todo_list():
-    return jsonify(TodoList)
+    return jsonify(TodoList), 200
+
+@app.route("/api/todos/add", methods=["POST"])
+def add_todo():
+    if not (todo := request.form.get("todo")):
+        return jsonify({ "error": "missing todo" }), 400
+
+    TodoList.append({"todo": todo})
+    return jsonify(TodoList), 200
