@@ -1,7 +1,22 @@
 const TodoList = document.getElementById("todo-list");
 
 function render(tasks) {
-    TodoList.innerHTML = tasks.map(task => `<li id="${task.id}"><span>${task.todo}</span><button>x</button></li>`).join("");
+    TodoList.replaceChildren();
+
+    tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.id = task.id;
+
+        const span = document.createElement("span");
+        span.textContent = task.todo;
+
+        const btn = document.createElement("button");
+        btn.textContent = "x";
+
+        li.appendChild(span);
+        li.appendChild(btn);
+        TodoList.appendChild(li);
+    });
 }
 
 fetch("/api/todos", { method: "GET" }).then(res => res.json()).then(tasks => render(tasks));
